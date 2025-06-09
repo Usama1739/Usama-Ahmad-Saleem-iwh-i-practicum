@@ -1,0 +1,46 @@
+doctype html
+html(lang="en")
+    head 
+        title= `${title}`
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/style.css")
+        
+    body    
+        .form-wrapper
+            h1= car ? 'Update Car Details' : 'Add New Car'
+            
+            form(method="POST" action=car ? `/update-cobj/${car.id}` : '/update-cobj')
+              
+                if car
+                    input(type="hidden" name="_method" value="PATCH")
+                
+                label(for="car_name") Car Name
+                input(
+                    type="text" 
+                    name="car_name" 
+                    value=car ? car.properties.car_name : ''
+                    required
+                )
+                
+                label(for="registration_number") Registration Number
+                input(
+                    type="text" 
+                    name="registration_number"
+                    value=car ? car.properties.registration_number : ''
+                )
+                
+                label(for="brand") Brand Name
+                input(
+                    type="text" 
+                    name="brand"
+                    value=car ? car.properties.brand : ''
+                )
+                
+                label(for="horsepower") Horse Power 
+                input(
+                    type="number" 
+                    name="horsepower"
+                    value=car ? car.properties.horsepower : ''
+                )
+                
+                input(type="submit" value=car ? 'Update' : 'Create')

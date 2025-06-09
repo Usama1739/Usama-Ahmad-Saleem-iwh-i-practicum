@@ -1,0 +1,51 @@
+doctype html
+html 
+    head 
+        title= `${title}`
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/style.css")
+        script.
+            async function confirmDelete(carId, carName) {
+                if (!confirm(`Delete "${carName}" permanently?`)) return;
+    
+                try {
+                    const response = await fetch(`/delete/${carId}`, { 
+                        method: 'DELETE' 
+                        });
+                    
+                    if (response.status === 204) {
+                        window.location.reload();
+                    } else {
+                        alert(`Failed: ${response.status}`);
+                        console.error('Delete error:', await response.text());
+                    }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Network error - check console');
+                    }
+            }
+    body
+        .container
+            h1 Car Collection
+            .add-button-container
+                a.button.add-button(href="/update-cobj") Add New Car
+            
+            table.car-table
+                thead
+                    tr
+                        th Car Name
+                        th Registration
+                        th Brand
+                        th Horsepower
+                        th Actions
+                tbody
+                    each car in data
+                        tr
+                            td= car.properties.car_name || 'N/A'
+                            td= car.properties.registration_number || 'N/A'
+                            td= car.properties.brand || 'N/A'
+                            td= car.properties.horsepower || 'N/A'
+                            td.actions
+                                a.edit-button(href=`/update-cobj/${car.id}`) Edit
+                                |
+                                a.action-btn.delete(href="#" onclick=`event.preventDefault(); confirmDelete('${car.id}', '${car.properties.car_name || 'this car'}')`) Delete
