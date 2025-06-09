@@ -1,13 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+:root {
+    --hubspot-blue: #425b76;
+    --hubspot-orange: #ff6b35;
+    --hubspot-grey: #f5f8fa;
+}
+
 body, * {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
+    color: var(--hubspot-blue);
 }
 
 h1 {
     margin: 1rem;
+    color: var(--hubspot-blue);
+    font-weight: 600;
 }
 
 .cards {
@@ -15,29 +24,38 @@ h1 {
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: wrap;
+    padding: 1rem;
 }
 
 .card {
     flex-basis: 31%;
     margin: 1rem 0.4rem;
-    padding: 1rem 0.4rem 2.5rem 0.4rem;
-    border: solid 1px lightgrey;
-    border-radius: 15px;
-    box-shadow: 3px 2px 6px lightgrey;
+    padding: 2rem;
+    border: 1px solid var(--hubspot-grey);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
 }
 
 .card__email {
     font-size: 1rem;
+    color: var(--hubspot-blue);
 }
 
 .form-wrapper {
-    font-size: 18px;
+    font-size: 16px;
     max-width: 768px;
     margin: 2rem auto;
     padding: 2rem;
-    border: solid 1px lightgrey;
-    border-radius: 15px;
-    box-shadow: 3px 2px 6px lightgrey;
+    border: 1px solid var(--hubspot-grey);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 label, input {
@@ -47,12 +65,151 @@ label, input {
 }
 
 input[type="text"] {
-    padding: .25rem;
+    padding: 0.5rem;
+    border: 1px solid var(--hubspot-grey);
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 input[type="submit"] {
-    background-color: lightgrey;
+    background-color: var(--hubspot-orange);
+    color: white;
     border: none;
-    padding: .375rem 1rem;
-    margin-top: 10px;
+    padding: 0.75rem 2rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #e56a4d;
+}
+
+/* HubSpot-like button styling */
+.button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: var(--hubspot-orange);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: #e56a4d;
+}
+
+/* HubSpot-like form field styling */
+.form-field {
+    margin-bottom: 1.5rem;
+}
+
+.form-field label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--hubspot-blue);
+}
+
+/* HubSpot-like table styling */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+th {
+    background-color: var(--hubspot-blue);
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--hubspot-grey);
+    color: var(--hubspot-blue);
+}
+
+tr:hover {
+    background-color: var(--hubspot-grey);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* Button spacing */
+.button-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Improved table styling */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 600px;
+}
+
+/* Add New Car button positioning */
+.add-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 1.5rem 0;
+    padding-right: 1rem;
+}
+
+.add-button {
+    background-color: var(--hubspot-orange);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.add-button:hover {
+    background-color: #e65a2e;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        min-width: auto;
+    }
+    
+    .add-button-container {
+        justify-content: center;
+    }
+    
+    .button-group {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
 }
