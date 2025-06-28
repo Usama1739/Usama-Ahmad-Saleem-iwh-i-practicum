@@ -27,8 +27,11 @@ html
     body
         .container
             h1 Car Collection
-            .add-button-container
-                a.button.add-button(href="/update-cobj") Add New Car
+            .button-container
+                .add-button-container
+                    a.button.add-button(href="/update-cobj") Add New Car
+                .services-button-container
+                    a.button.add-button(href="/requestservice") Services
             
             table.car-table
                 thead
@@ -37,6 +40,8 @@ html
                         th Registration
                         th Brand
                         th Horsepower
+                        th Car Owner
+                        th Car Owner Try
                         th Actions
                 tbody
                     each car in data
@@ -45,6 +50,8 @@ html
                             td= car.properties.registration_number || 'N/A'
                             td= car.properties.brand || 'N/A'
                             td= car.properties.horsepower || 'N/A'
+                            td= car.properties.car_owner || 'N/A'
+                            td= car.properties.car_owner_try || 'N/A'
                             td.actions
                                 a.edit-button(href=`/update-cobj/${car.id}`) Edit
                                 |

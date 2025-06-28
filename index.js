@@ -34,9 +34,10 @@ app.get('/contacts', async (req, res) => {
 
 // TODO: ROUTE 1 - Create a new app.get route for the homepage to call your custom object data. Pass this data along to the front-end and create a new pug template in the views folder.
 
+
 // * Code for Route 1 
 app.get('/', async (req, res) => {
-    const cars = 'https://api.hubapi.com/crm/v3/objects/cars/?properties=car_name,brand,horse,horsepower,registration_number';
+    const cars = 'https://api.hubapi.com/crm/v3/objects/2-169259517/?properties=car_name,brand,horse,horsepower,registration_number,car_owner_try,car_owner';
 
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
@@ -71,7 +72,7 @@ app.get('/update-cobj/:id?', async (req, res) => {
         
         if (req.params.id) {
             const response = await axios.get(
-                `https://api.hubapi.com/crm/v3/objects/cars/${req.params.id}?properties=car_name,brand,horse,horsepower,registration_number`,
+                `https://api.hubapi.com/crm/v3/objects/2-169259517/${req.params.id}?properties=car_name,brand,horse,horsepower,registration_number,car_owner_try,car_owner`,
                 { headers }
             );
             car = response.data;
@@ -100,7 +101,9 @@ app.post('/update-cobj/:id?', async (req, res) => {
             "car_name": req.body.car_name,
             "registration_number": req.body.registration_number,
             "brand": req.body.brand,
-            "horsepower": parseInt(req.body.horsepower)
+            "horsepower": parseInt(req.body.horsepower),
+            "car_owner": req.body.car_owner,
+            "car_owner_try": req.body.car_owner_try,
         }
     };
 
@@ -109,8 +112,8 @@ app.post('/update-cobj/:id?', async (req, res) => {
         'Content-Type': 'application/json'
     };
 
-    const carUpdateUrl = `https://api.hubapi.com/crm/v3/objects/cars/${req.params.id}`;
-    const carCreateUrl = 'https://api.hubapi.com/crm/v3/objects/cars';
+    const carUpdateUrl = `https://api.hubapi.com/crm/v3/objects/2-169259517/${req.params.id}`;
+    const carCreateUrl = 'https://api.hubapi.com/crm/v3/objects/2-169259517';
     try {
         if (req.params.id) {
             // Update existing car (PATCH)
@@ -135,10 +138,108 @@ app.delete('/delete/:id', async (req, res) => {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
     };
-    const carDeleteUrl = `https://api.hubapi.com/crm/v3/objects/cars/${req.params.id}`;
+    const carDeleteUrl = `https://api.hubapi.com/crm/v3/objects/2-169259517/${req.params.id}`;
     console.log('carDeleteUrl:', carDeleteUrl);
     try {
         await axios.delete( carDeleteUrl, { headers } );
+        res.sendStatus(204);
+    } catch (error) {
+        console.error('Delete Error:', error.response?.data || error.message);
+        res.status(500).send('Error deleting car');
+    }
+});
+
+// GET method for Service Requests
+app.get('/requestservice', async (req, res) => {
+    const service_tickets = 'https://api.hubapi.com/crm/v3/objects/2-170184685/?properties=customer_name, appointment_date, service_type';
+
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+    try {
+        const response = await axios.get(service_tickets, { headers });
+        console.log("Full Response:", response.data.results);
+        const data = response.data.results;
+        res.render('servicerequests', { title: '', data });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching Service Tickets data');
+    }
+
+});
+
+
+app.get('/update-srobj/:id?', async (req, res) => {
+    try {
+        let service_ticket = null;
+        const headers = {
+            Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+            'Content-Type': 'application/json'
+        };
+        
+        if (req.params.id) {
+            const response = await axios.get(
+                `https://api.hubapi.com/crm/v3/objects/2-170184685/${req.params.id}?properties=customer_name, appointment_date, service_type`,
+                { headers }
+            );
+            service_ticket = response.data;
+        }
+        
+        res.render('createservicerequest', { 
+            title: service_ticket ? 'Update Service Request' : 'Add New Service Request',
+            service_ticket
+        });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error loading form');
+    }
+});
+
+// POST route for create/update
+app.post('/update-srobj/:id?', async (req, res) => {
+    const serviceRqData = {
+        properties: {
+            "customer_name": req.body.customer_name,
+            "appointment_date": Math.floor(new Date(req.body.appointment_date).getTime() / 1000),
+            "service_type": req.body.service_type,
+        }
+    };
+
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    const srUpdateUrl = `https://api.hubapi.com/crm/v3/objects/2-170184685/${req.params.id}`;
+    const srCreateUrl = 'https://api.hubapi.com/crm/v3/objects/2-170184685';
+    try {
+        if (req.params.id) {
+            // Update existing (PATCH)
+            await axios.patch( srUpdateUrl, serviceRqData, { headers } );
+        } else {
+            // Create new (POST)
+            await axios.post( srCreateUrl, serviceRqData, { headers } );
+        }
+        res.redirect('/requestservice');
+    } catch (error) {
+        console.error('Error:', error.response?.data || error.message);
+        res.status(500).send('Error saving car');
+    }
+});
+
+// DELETE route for HubSpot custom objects
+app.delete('/delete/:id', async (req, res) => {
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+    const srDeleteUrl = `https://api.hubapi.com/crm/v3/objects/2-170184685/${req.params.id}`;
+    console.log('carDeleteUrl:', srDeleteUrl);
+    try {
+        await axios.delete( srDeleteUrl, { headers } );
         res.sendStatus(204);
     } catch (error) {
         console.error('Delete Error:', error.response?.data || error.message);

@@ -1,0 +1,50 @@
+doctype html
+html 
+    head 
+        title= `${title}`
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="/css/style.css")
+        script.
+            async function confirmDelete(service_tickets_id) {
+                if (!confirm(`Delete request permanently?`)) return;
+    
+                try {
+                    const response = await fetch(`/delete/${service_tickets_id}`, { 
+                        method: 'DELETE' 
+                        });
+                    
+                    if (response.status === 204) {
+                        window.location.reload();
+                    } else {
+                        alert(`Failed: ${response.status}`);
+                        console.error('Delete error:', await response.text());
+                    }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Network error - check console');
+                    }
+            }
+    body
+        .container
+            h1 Service Tickets
+            .add-button-container
+                a.button.add-button(href="/update-srobj") Create Service Request
+            
+            table.car-table
+                thead
+                    tr
+                        th Customer Name
+                        th Appointment Date
+                        th Service Type
+                        th Actions
+                tbody
+                    each service_ticket in data
+                        tr
+                            td= service_ticket.properties.customer_name || 'N/A'
+                            td= service_ticket.properties.appointment_date || 'N/A'
+                            td= service_ticket.properties.service_type || 'N/A'
+                            td.actions
+                                a.edit-button(href=``) Edit
+                                |
+                                a.action-btn.delete(href="#" onclick=`event.preventDefault(); confirmDelete('${service_ticket.id}')`) Delete
+                                
