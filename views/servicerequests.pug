@@ -44,7 +44,7 @@ html
                             td= service_ticket.properties.appointment_date || 'N/A'
                             td= service_ticket.properties.service_type || 'N/A'
                             td.actions
-                                a.edit-button(href=``) Edit
+                                a.edit-button(href=`/update-srobj/${service_ticket.id}`) Edit
                                 |
                                 a.action-btn.delete(href="#" onclick=`event.preventDefault(); confirmDelete('${service_ticket.id}')`) Delete
                                 

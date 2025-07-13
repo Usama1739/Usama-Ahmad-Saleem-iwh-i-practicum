@@ -7,11 +7,11 @@ html(lang="en")
         
     body    
         .form-wrapper
-            h1= service_request ? 'Update Service Request Details' : 'Create New Service Request'
+            h1= service_ticket ? 'Update Service Request Details' : 'Create New Service Request'
             
-            form(method="POST" action=service_request ? `/update-srobj/${service_request.id}` : '/update-srobj')
+            form(method="POST" action=service_ticket ? `/update-srobj/${service_ticket.id}` : '/update-srobj')
                 .form-grid
-                    if service_request
+                    if service_ticket
                         input(type="hidden" name="_method" value="PATCH")
                     
                     .form-field
@@ -19,7 +19,7 @@ html(lang="en")
                         input(
                             type="text"
                             name="customer_name"
-                            value=service_request ? service_request.properties.customer_name : ''
+                            value=service_ticket ? service_ticket.properties.customer_name : ''
                             required
                         )
 
@@ -28,7 +28,7 @@ html(lang="en")
                         input(
                             type="datetime-local"
                             name="appointment_date"
-                            value=service_request ? service_request.properties.appointment_date : ''
+                            value=service_ticket ? service_ticket.properties.appointment_date : ''
                             required
                         )
 
@@ -36,9 +36,9 @@ html(lang="en")
                         label(for="service_type") Service Type
                         select(name="service_type" required)
                             option(value="" disabled selected)= "Select a service"
-                            option(value="Oil Change" selected=service_request && service_request.properties.service_type === 'Oil Change') Oil Change
-                            option(value="General Service" selected=service_request && service_request.properties.service_type === 'General Service') General Service
-                            option(value="Detailing" selected=service_request && service_request.properties.service_type === 'Detailing') Detailing
+                            option(value="Oil Change" selected=service_ticket && service_ticket.properties.service_type === 'Oil Change') Oil Change
+                            option(value="General Service" selected=service_ticket && service_ticket.properties.service_type === 'General Service') General Service
+                            option(value="Detailing" selected=service_ticket && service_ticket.properties.service_type === 'Detailing') Detailing
                 
                 .form-submit
                     input(type="submit" value=service_type ? 'Update' : 'Create')

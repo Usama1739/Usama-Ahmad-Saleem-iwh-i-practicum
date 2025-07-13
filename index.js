@@ -181,9 +181,10 @@ app.get('/update-srobj/:id?', async (req, res) => {
         
         if (req.params.id) {
             const response = await axios.get(
-                `https://api.hubapi.com/crm/v3/objects/2-170184685/${req.params.id}?properties=customer_name, appointment_date, service_type`,
+                `https://api.hubapi.com/crm/v3/objects/2-170184685/${req.params.id}?properties=customer_name,appointment_date,service_type`,
                 { headers }
             );
+
             service_ticket = response.data;
         }
         
